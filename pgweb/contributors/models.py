@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from pgweb.core.models import Organisation
+
 
 class ContributorType(models.Model):
     typename = models.CharField(max_length=32, null=False, blank=False)
@@ -38,3 +40,19 @@ class Contributor(models.Model):
 
     class Meta:
         ordering = ('lastname', 'firstname',)
+
+
+class ContributorBadge(models.Model):
+    org = models.ForeignKey(Organisation, null=False, blank=False, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, null=False, blank=False)
+
+    purge_urls = ('/community/contributors/', )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ('org', 'name',)
+        unique_together = (
+            ('org', 'name',),
+        )
