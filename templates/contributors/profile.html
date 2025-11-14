@@ -1,0 +1,81 @@
+{%extends "base/page.html"%}
+{%load pgfilters%}
+{%block title%}{{contributor.firstname}} {{contributor.lastname}}{%endblock%}
+{%block contents%}
+<h1>{{contributor.firstname}} {{contributor.lastname}}</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <h2>Profile Information</h2>
+    <dl class="row">
+      <dt class="col-sm-3">Name</dt>
+      <dd class="col-sm-9">{{contributor.firstname}} {{contributor.lastname}}</dd>
+
+      {%if contributor.email%}
+      <dt class="col-sm-3">Email</dt>
+      <dd class="col-sm-9">{{contributor.email|hidemail}}</dd>
+      {%endif%}
+
+      {%if contributor.company%}
+      <dt class="col-sm-3">Company</dt>
+      <dd class="col-sm-9">
+        {%if contributor.companyurl%}
+          <a href="{{contributor.companyurl}}" target="_blank" rel="noopener">{{contributor.company}}</a>
+        {%else%}
+          {{contributor.company}}
+        {%endif%}
+      </dd>
+      {%endif%}
+
+      {%if contributor.location%}
+      <dt class="col-sm-3">Location</dt>
+      <dd class="col-sm-9">{{contributor.location}}</dd>
+      {%endif%}
+
+      <dt class="col-sm-3">Contributor Type</dt>
+      <dd class="col-sm-9">{{contributor.ctype}}</dd>
+    </dl>
+
+    {%if contributor.contribution%}
+    <h2>Contribution</h2>
+    <p>{{contributor.contribution}}</p>
+    {%endif%}
+  </div>
+
+  <div class="col-md-4">
+    {%if badge_awards%}
+    <h2>Active Badges</h2>
+    <div class="badges">
+      {%for award in badge_awards%}
+      <div class="badge-item mb-3 p-3 border rounded bg-light">
+        <h5>{{award.badge.name}}</h5>
+        <p class="mb-1"><strong>Organization:</strong> {{award.badge.org.name}}</p>
+        <p class="mb-0 text-muted"><small>Awarded: {{award.awarded_date}}</small></p>
+      </div>
+      {%endfor%}
+    </div>
+    {%endif%}
+
+    {%if inactive_badge_awards%}
+    <h2>Pending Badges</h2>
+    <div class="alert alert-info">
+      <small>These badges are waiting for organization approval. Only you can see them.</small>
+    </div>
+    <div class="badges">
+      {%for award in inactive_badge_awards%}
+      <div class="badge-item mb-3 p-3 border rounded bg-white">
+        <h5>{{award.badge.name}} <span class="badge bg-warning text-dark">Pending</span></h5>
+        <p class="mb-1"><strong>Organization:</strong> {{award.badge.org.name}}</p>
+        <p class="mb-0 text-muted"><small>Requested: {{award.awarded_date}}</small></p>
+      </div>
+      {%endfor%}
+    </div>
+    {%endif%}
+  </div>
+</div>
+
+<div class="mt-4">
+  <a href="/community/contributors/" class="btn btn-secondary">&laquo; Back to Contributors List</a>
+</div>
+
+{%endblock%}
