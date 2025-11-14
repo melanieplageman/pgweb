@@ -56,3 +56,23 @@ class ContributorBadge(models.Model):
         unique_together = (
             ('org', 'name',),
         )
+
+
+class ContributorBadgeAward(models.Model):
+    contributor = models.ForeignKey(Contributor, null=False, blank=False, on_delete=models.CASCADE)
+    badge = models.ForeignKey(ContributorBadge, null=False, blank=False, on_delete=models.CASCADE)
+    awarded_date = models.DateField(null=False, blank=False, auto_now_add=True)
+    active = models.BooleanField(null=False, blank=False, default=True)
+
+    purge_urls = ('/community/contributors/', )
+
+    def __str__(self):
+        return "%s - %s" % (self.contributor, self.badge)
+
+    class Meta:
+        ordering = ('contributor', 'awarded_date',)
+        unique_together = (
+            ('contributor', 'badge',),
+        )
+        verbose_name = 'Contributor Badge Award'
+        verbose_name_plural = 'Contributor Badge Awards'
