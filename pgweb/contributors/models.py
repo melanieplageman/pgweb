@@ -76,3 +76,39 @@ class ContributorBadgeAward(models.Model):
         )
         verbose_name = 'Contributor Badge Award'
         verbose_name_plural = 'Contributor Badge Awards'
+
+
+class ContributorBadgeRequest(models.Model):
+    STATUS_PENDING = 'pending'
+    STATUS_APPROVED = 'approved'
+    STATUS_REJECTED = 'rejected'
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING, 'Pending'),
+        (STATUS_APPROVED, 'Approved'),
+        (STATUS_REJECTED, 'Rejected'),
+    ]
+
+    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
+    contributor = models.ForeignKey(Contributor, null=True, blank=True, on_delete=models.CASCADE,
+                                    help_text='If you have a contributor profile, select it here')
+    badge = models.ForeignKey(ContributorBadge, null=False, blank=False, on_delete=models.CASCADE)
+    justification = models.TextField(null=False, blank=False,
+                                     help_text='Explain why you should receive this badge')
+    status = models.CharField(max_length=20, null=False, blank=False,
+                             default=STATUS_PENDING, choices=STATUS_CHOICES)
+    requested_date = models.DateTimeField(null=False, blank=False, auto_now_add=True)
+    reviewed_date = models.DateTimeField(null=True, blank=True)
+    reviewed_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL,
+                                   related_name='badge_requests_reviewed')
+    review_notes = models.TextField(null=True, blank=True)
+
+    purge_urls = ('/community/contributors/', )
+
+    def __str__(self):
+        return "%s - %s (%s)" % (self.user.username, self.badge.name, self.status)
+
+    class Meta:
+        ordering = ('-requested_date',)
+        verbose_name = 'Badge Request'
+        verbose_name_plural = 'Badge Requests'

@@ -1,0 +1,48 @@
+{%extends "base/page.html"%}
+{%block title%}Request Badge{%endblock%}
+{%block contents%}
+<h1>Request a Badge</h1>
+
+<p>Use this form to request a badge to be added to your contributor profile. The badge will be added to your profile in an inactive state, and the badge organization will activate it after reviewing your request.</p>
+
+<form method="post" class="form">
+  {% csrf_token %}
+
+  <div class="mb-3">
+    <label for="id_badge" class="form-label">Badge</label>
+    {{ form.badge }}
+    {% if form.badge.help_text %}
+    <div class="form-text">{{ form.badge.help_text }}</div>
+    {% endif %}
+    {% if form.badge.errors %}
+    <div class="alert alert-danger">{{ form.badge.errors }}</div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_contributor" class="form-label">Contributor Profile (optional)</label>
+    {{ form.contributor }}
+    {% if form.contributor.help_text %}
+    <div class="form-text">{{ form.contributor.help_text }}</div>
+    {% endif %}
+    {% if form.contributor.errors %}
+    <div class="alert alert-danger">{{ form.contributor.errors }}</div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_justification" class="form-label">Justification</label>
+    {{ form.justification }}
+    {% if form.justification.help_text %}
+    <div class="form-text">{{ form.justification.help_text }}</div>
+    {% endif %}
+    {% if form.justification.errors %}
+    <div class="alert alert-danger">{{ form.justification.errors }}</div>
+    {% endif %}
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit Request</button>
+  <a href="{% url 'badge_requests' %}" class="btn btn-secondary">View My Requests</a>
+</form>
+
+{%endblock%}

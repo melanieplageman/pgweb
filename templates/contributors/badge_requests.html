@@ -1,0 +1,48 @@
+{%extends "base/page.html"%}
+{%block title%}My Badge Requests{%endblock%}
+{%block contents%}
+<h1>My Badge Requests</h1>
+
+<div class="mb-3">
+  <a href="{% url 'request_badge' %}" class="btn btn-primary">Request New Badge</a>
+</div>
+
+{% if badge_requests %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Badge</th>
+      <th>Organization</th>
+      <th>Requested Date</th>
+      <th>Justification</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for request in badge_requests %}
+    <tr>
+      <td>{{ request.badge.name }}</td>
+      <td>{{ request.badge.org.name }}</td>
+      <td>{{ request.requested_date|date:"Y-m-d H:i" }}</td>
+      <td>{{ request.justification|truncatewords:20 }}</td>
+      <td>
+        {% if request.award_active == True %}
+          <span class="badge bg-success">Active</span>
+        {% elif request.award_active == False %}
+          <span class="badge bg-warning text-dark">Pending Activation</span>
+        {% else %}
+          <span class="badge bg-secondary">Processing</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">
+  You have not submitted any badge requests yet.
+  <a href="{% url 'request_badge' %}">Request a badge now</a>.
+</div>
+{% endif %}
+
+{%endblock%}
