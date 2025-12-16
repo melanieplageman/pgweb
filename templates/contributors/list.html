@@ -37,7 +37,7 @@
     {%for c in t.contributor_set.all %}
      {%if t.detailed%}
       <tr>
-       <td>{{c.firstname}} {{c.lastname}} {%if t.showemail and c.email%}({{c.email|hidemail}}){%endif%}
+       <td>{% if c.user %}<a href="/community/contributors/{{c.user.username}}/">{{c.firstname}} {{c.lastname}}</a>{% else %}{{c.firstname}} {{c.lastname}}{% endif %} {%if t.showemail and c.email%}({{c.email|hidemail}}){%endif%}
           {%if c.company %}
           <br/>
             {% if c.companyurl %}
@@ -54,13 +54,13 @@
      {%else%}
       {%if forloop.counter0|divisibleby:"2" %}
        <tr>
-        <td>{{c.firstname}} {{c.lastname}}{%if t.showemail and c.email%} ({{c.email|hidemail}}){%endif%}</td>
+        <td>{% if c.user %}<a href="/community/contributors/{{c.user.username}}/">{{c.firstname}} {{c.lastname}}</a>{% else %}{{c.firstname}} {{c.lastname}}{% endif %}{%if t.showemail and c.email%} ({{c.email|hidemail}}){%endif%}</td>
         {%if forloop.last%}
         <td></td>
        </tr>
         {%endif%}
       {%else%}
-        <td>{{c.firstname}} {{c.lastname}}{%if t.showemail and c.email%} ({{c.email|hidemail}}){%endif%}</td>
+        <td>{% if c.user %}<a href="/community/contributors/{{c.user.username}}/">{{c.firstname}} {{c.lastname}}</a>{% else %}{{c.firstname}} {{c.lastname}}{% endif %}{%if t.showemail and c.email%} ({{c.email|hidemail}}){%endif%}</td>
        </tr>
       {%endif%}
      {%endif%}
