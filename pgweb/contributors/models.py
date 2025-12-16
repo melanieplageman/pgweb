@@ -31,6 +31,9 @@ class Contributor(models.Model):
     contribution = models.TextField(null=True, blank=True,
                                     help_text='Only displayed for Major Contributors')
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    hidden = models.BooleanField(null=False, blank=False, default=True,
+                                 verbose_name='Hide public profile',
+                                 help_text='Check to hide your contributor profile. Uncheck to make it publicly accessible at /community/contributors/[username]/')
 
     send_notification = True
     purge_urls = ('/community/contributors/', )

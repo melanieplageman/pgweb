@@ -12,7 +12,12 @@ def completelist(request):
 
 
 def contributor_profile(request, username):
-    contributor = get_object_or_404(Contributor, user__username=username)
+    # Only show profiles that are not hidden
+    contributor = get_object_or_404(
+        Contributor,
+        user__username=username,
+        hidden=False
+    )
     return render_pgweb(request, 'community', 'contributors/profile.html', {
         'contributor': contributor,
     })

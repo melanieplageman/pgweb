@@ -161,6 +161,9 @@ class ContributorForm(forms.ModelForm):
     class Meta:
         model = Contributor
         exclude = ('ctype', 'lastname', 'firstname', 'user', )
+        widgets = {
+            'hidden': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
 
 
 class AddEmailForm(forms.Form):

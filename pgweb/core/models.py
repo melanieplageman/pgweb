@@ -272,6 +272,9 @@ class UserProfile(models.Model):
     block_oauth = models.BooleanField(null=False, blank=False, default=False,
                                       verbose_name="Block OAuth login",
                                       help_text="Disallow login to this account using OAuth providers like Google or Microsoft.")
+    show_contributor_profile = models.BooleanField(null=False, blank=False, default=False,
+                                                   verbose_name="Show public contributor profile",
+                                                   help_text="Allow others to view your contributor profile at /community/contributors/[username]/")
 
 
 # Notifications sent for any moderated content.
