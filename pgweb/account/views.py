@@ -142,14 +142,14 @@ def profile(request):
     # accounts.
     can_change_email = (request.user.password != OAUTH_PASSWORD_STORE)
 
-    # We may have a contributor record - and we only show that part of the
-    # form if we have it for this user.
-    try:
-        contrib = Contributor.objects.get(user=request.user.pk)
-    except Contributor.DoesNotExist:
-        contrib = None
-
-    contribform = None
+    contrib, _ = Contributor.objects.get_or_create(
+        user=request.user,
+        defaults={
+            'firstname': request.user.first_name,
+            'lastname': request.user.last_name,
+            'email': request.user.email,
+        }
+    )
 
     secondaryaddresses = SecondaryEmail.objects.filter(user=request.user)
 
@@ -158,10 +158,9 @@ def profile(request):
         userform = UserForm(can_change_email, secondaryaddresses, data=request.POST, instance=request.user)
         profileform = UserProfileForm(data=request.POST, instance=profile)
         secondaryemailform = AddEmailForm(request.user, data=request.POST)
-        if contrib:
-            contribform = ContributorForm(data=request.POST, instance=contrib)
+        contribform = ContributorForm(data=request.POST, instance=contrib)
 
-        if userform.is_valid() and profileform.is_valid() and secondaryemailform.is_valid() and (not contrib or contribform.is_valid()):
+        if userform.is_valid() and profileform.is_valid() and secondaryemailform.is_valid() and contribform.is_valid():
             user = userform.save()
 
             # Email takes some magic special handling, since we only allow picking of existing secondary emails, but it's
@@ -179,8 +178,7 @@ def profile(request):
                 log.info("User {} changed primary email from {} to {}".format(user.username, oldemail, user.email))
 
             profileform.save()
-            if contrib:
-                contribform.save()
+            contribform.save()
             if secondaryemailform.cleaned_data.get('email1', ''):
                 sa = SecondaryEmail(user=request.user, email=secondaryemailform.cleaned_data['email1'], token=generate_random_token())
                 sa.save()
@@ -203,8 +201,7 @@ def profile(request):
         userform = UserForm(can_change_email, secondaryaddresses, instance=request.user)
         profileform = UserProfileForm(instance=profile)
         secondaryemailform = AddEmailForm(request.user)
-        if contrib:
-            contribform = ContributorForm(instance=contrib)
+        contribform = ContributorForm(instance=contrib)
 
     return render_pgweb(request, 'account', 'account/userprofileform.html', {
         'userform': userform,

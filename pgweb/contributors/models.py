@@ -19,7 +19,9 @@ class ContributorType(models.Model):
 
 
 class Contributor(models.Model):
-    ctype = models.ForeignKey(ContributorType, on_delete=models.CASCADE, verbose_name='Contributor Type')
+    ctype = models.ForeignKey(ContributorType,
+                              on_delete=models.CASCADE,
+                              verbose_name='Contributor Type', null=True, blank=True)
     lastname = models.CharField(max_length=100, null=False, blank=False)
     firstname = models.CharField(max_length=100, null=False, blank=False)
     email = models.EmailField(null=False, blank=True)
@@ -27,7 +29,7 @@ class Contributor(models.Model):
     companyurl = models.URLField(max_length=100, null=True, blank=True, verbose_name='Company URL')
     location = models.CharField(max_length=100, null=True, blank=True)
     contribution = models.TextField(null=True, blank=True,
-                                    help_text='This description is currently used for major contributors only')
+                                    help_text='Only displayed for Major Contributors')
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 
     send_notification = True

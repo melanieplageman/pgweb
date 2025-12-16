@@ -94,9 +94,12 @@
       </div>
     {%endfor%}
 
-  {% if contribform %}
     <h2>Edit contributor information</h2>
-    <p>You can edit the information that's shown on the <a href="/community/contributors/" target="_blank" rel="noopener">contributors</a> page. Please be careful as your changes will take effect immediately!
+    <p>You can edit the information that is shown on your contributor profile.
+      If you are a recognized Major Contributor, this is what will be displayed
+      on the
+      <a href="/community/contributors/" target="_blank" rel="noopener">contributors</a>
+      page. Please be careful as your changes will take effect immediately!
     </p>
     {% for field in contribform %}
       <div class="form-group row">
@@ -116,7 +119,6 @@
         </div>
       </div>
     {% endfor %}
-  {% endif %}
 
   <div class="submit-row">
     <input class="btn btn-primary" type="submit" value="Save" />
